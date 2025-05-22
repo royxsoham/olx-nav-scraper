@@ -1,0 +1,14 @@
+#!/bin/bash
+# extract_nav_data.sh
+
+curl -s https://www.amfiindia.com/spages/NAVAll.txt | \
+awk -F ';' '
+BEGIN { OFS="\t"; print "Scheme Name", "Net Asset Value" }
+/^;|^$/ { next }  # Skip blank/metadata lines
+NF >= 5 { print $4, $5 }  # Scheme Name, Net Asset Value
+' > nav_data.tsv
+
+echo "Saved NAV data to nav_data.tsv"
+
+
+# If you plan to feed it into a web app, API, or JS pipeline, yes — go JSON. Otherwise, TSV is more human-readable and works better with Excel/Pandas.
